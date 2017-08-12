@@ -34,6 +34,8 @@ public class HTTPServer: Server {
     /// HTTP `ServerDelegate`.
     public var delegate: ServerDelegate?
 
+    public var socketFamily: ProtocolFamily = .inet4
+
     /// Port number for listening for new connections.
     public private(set) var port: Int?
 
@@ -77,10 +79,10 @@ public class HTTPServer: Server {
     /// Listens for connections on a socket
     ///
     /// - Parameter on: port number for new connections (eg. 8080)
-    public func listen(on port: Int, socketFamily: ProtocolFamily = .inet4) throws {
+    public func listen(on port: Int) throws {
         self.port = port
         do {
-            let socket = try Socket.create(family: socketFamily, type: .stream, proto: .tcp)
+            let socket = try Socket.create(family: self.socketFamily, type: .stream, proto: .tcp)
             self.listenSocket = socket
 
             // If SSL config has been created,
